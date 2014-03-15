@@ -1,0 +1,30 @@
+#!/bin/bash
+
+set -e
+
+version=$1
+mpidir=/opt/mpich/3.1
+
+# Download tarball
+wget http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-${version}.tar.bz2
+
+# Extract and install gcc-compiled version
+tar xvf hdf5-${version}.tar.bz2
+cd hdf5-${version}
+CC=${mpidir}-gnu/bin/mpicc FC=${mpidir}-gnu/bin/mpif90 \
+    ./configure --prefix=/opt/hdf5/${version}-gnu \
+    --enable-fortran --enable-fortran2003
+make
+make install
+cd ..
+
+# Extract and install Intel-compiled version
+rm -rf hdf5-${version}
+tar xvf hdf5-${version}.tar.bz2
+cd hdf5-${version}
+CC=${mpidir}-intel/bin/mpicc FC=${mpidir}-intel/bin/mpif90 \
+    ./configure --prefix=/opt/hdf5/${version}-intel \
+    --enable-fortran --enable-fortran2003
+make
+make install
+cd ..
