@@ -1,0 +1,27 @@
+#!/bin/bash
+
+set -e
+
+version=$1
+
+# Download tarball
+wget http://www.mpich.org/static/downloads/${version}/mpich-${version}.tar.gz
+
+# Extract and install gcc-compiled version
+tar xvf mpich-${version}.tar.gz
+cd mpich-${version}
+CC=gcc CXX=g++ F77=gfortran FC=gfortran ./configure \
+    --prefix=/opt/mpich/${version}-gnu
+make
+make install
+cd ..
+
+# Extract and install Intel-compiled version
+rm -rf mpich-${version}
+tar xvf mpich-${version}.tar.gz
+cd mpich-${version}
+CC=icc CXX=icpc F77=ifort FC=ifort ./configure \
+    --prefix=/opt/mpich/${version}-intel
+make
+make install
+cd ..
