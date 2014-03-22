@@ -1,0 +1,31 @@
+#!/bin/bash
+
+set -e
+
+version=$1
+mpidir=/opt/mpich/3.1
+
+# Download tarball
+wget http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-${version}.tar.gz
+
+# Extract and install gcc-compiled version
+tar xvf petsc-${version}.tar.gz
+cd petsc-${version}
+./configure --prefix=/opt/petsc/${version}-gnu \
+    --download-f-blas-lapack --with-mpi-dir=${mpidir}-gnu \
+    --with-shared-libraries --with-fortran-datatypes
+make
+make install
+cd ..
+rm -rf petsc-${version}
+
+# Extract and install Intel-compiled version
+tar xvf petsc-${version}.tar.gz
+cd petsc-${version}
+./configure --prefix=/opt/petsc/${version}-intel \
+    --with-blas-lapack-dir=/opt/intel/composerxe/mkl \
+    --with-mpi-dir=${mpidir}-intel \
+    --with-shared-libraries --with-fortran-datatypes
+make
+make install
+cd ..
