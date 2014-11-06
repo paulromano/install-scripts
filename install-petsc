@@ -14,7 +14,7 @@ fi
 tar xvf petsc-${version}.tar.gz
 cd petsc-${version}
 ./configure --prefix=/opt/petsc/${version}-gnu \
-    --download-f-blas-lapack --with-mpi-dir=${mpidir}-gnu \
+    --download-fblaslapack --with-mpi-dir=${mpidir}-gnu \
     --with-shared-libraries --with-fortran-datatypes
 make
 make install
