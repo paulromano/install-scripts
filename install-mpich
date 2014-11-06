@@ -5,7 +5,9 @@ set -e
 version=$1
 
 # Download tarball
-wget http://www.mpich.org/static/downloads/${version}/mpich-${version}.tar.gz
+if [[ ! -e mpich-${version}.tar.gz ]]; then
+    wget http://www.mpich.org/static/downloads/${version}/mpich-${version}.tar.gz
+fi
 
 # Extract and install gcc-compiled version
 tar xvf mpich-${version}.tar.gz

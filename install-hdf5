@@ -6,7 +6,9 @@ version=$1
 mpidir=/opt/mpich/3.1
 
 # Download tarball
-wget http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-${version}.tar.bz2
+if [[ ! -e hdf5-${version}.tar.bz2 ]]; then
+    wget http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-${version}.tar.bz2
+fi
 
 # Extract and install gcc-compiled version
 tar xvf hdf5-${version}.tar.bz2

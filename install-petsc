@@ -6,7 +6,9 @@ version=$1
 mpidir=/opt/mpich/3.1
 
 # Download tarball
-wget http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-${version}.tar.gz
+if [[ ! -e petsc-${version}.tar.gz ]]; then
+    wget http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-${version}.tar.gz
+fi
 
 # Extract and install gcc-compiled version
 tar xvf petsc-${version}.tar.gz
