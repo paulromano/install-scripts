@@ -1,0 +1,29 @@
+#!/bin/bash
+
+set -e
+
+version=$1
+
+# Download tarball
+if [[ ! -e openmpi-${version}.tar.bz2 ]]; then
+    wget http://open-mpi.org/software/ompi/v1.8/downloads/openmpi-${version}.tar.bz2
+fi
+
+# Extract and install gcc-compiled version
+tar xvf openmpi-${version}.tar.bz2
+cd openmpi-${version}
+CC=gcc CXX=g++ FC=gfortran ./configure \
+    --prefix=/opt/openmpi/${version}-gnu
+make
+make install
+cd ..
+
+# Extract and install Intel-compiled version
+rm -rf openmpi-${version}
+tar xvf openmpi-${version}.tar.bz2
+cd openmpi-${version}
+CC=icc CXX=icpc FC=ifort ./configure \
+    --prefix=/opt/openmpi/${version}-intel
+make
+make install
+cd ..
