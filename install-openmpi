@@ -6,7 +6,7 @@ version=$1
 
 # Download tarball
 if [[ ! -e openmpi-${version}.tar.bz2 ]]; then
-    wget http://open-mpi.org/software/ompi/v1.8/downloads/openmpi-${version}.tar.bz2
+    wget http://open-mpi.org/software/ompi/v${version:0:3}/downloads/openmpi-${version}.tar.bz2
 fi
 
 # Extract and install gcc-compiled version
