@@ -1,0 +1,29 @@
+#!/bin/bash
+
+set -e
+
+version=$1
+
+# Download tarball
+if [[ ! -e papi-${version}.tar.gz ]]; then
+   wget http://icl.cs.utk.edu/papi/downloads/papi-${version}.tar.gz
+fi
+
+# Extract and install gcc-compiled version
+tar xvf papi-${version}.tar.gz
+cd papi-${version}/src
+CC=gcc CXX=g++ FC=gfortran ./configure \
+    --prefix=$HOME/opt/papi/${version}-gnu
+make
+make install
+cd ..
+
+# Extract and install Intel-compiled version
+rm -rf papi-${version}.tar.gz
+tar xvf papi-${version}.tar.gz
+cd papi-${version}/src
+CC=icc CXX=icpc FC=ifort ./configure \
+    --prefix=$HOME/opt/papi/${version}-intel
+make
+make install
+cd ..
