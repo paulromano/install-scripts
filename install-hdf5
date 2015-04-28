@@ -3,7 +3,9 @@
 set -e
 
 version=$1
-mpidir=/opt/mpich/3.1
+mpidist=mpich
+mpiversion=3.2b2
+mpidir=/opt/$mpidist/$mpiversion
 
 # Download tarball
 if [[ ! -e hdf5-${version}.tar.bz2 ]]; then
@@ -35,7 +37,7 @@ rm -rf hdf5-${version}
 tar xvf hdf5-${version}.tar.bz2
 cd hdf5-${version}
 CC=${mpidir}-gnu/bin/mpicc FC=${mpidir}-gnu/bin/mpif90 \
-    ./configure --prefix=/opt/phdf5/${version}-gnu \
+    ./configure --prefix=/opt/phdf5/${version}-${mpidist}-${mpiversion}-gnu \
     --enable-fortran --enable-fortran2003
 make
 make install
@@ -46,7 +48,7 @@ rm -rf hdf5-${version}
 tar xvf hdf5-${version}.tar.bz2
 cd hdf5-${version}
 CC=${mpidir}-intel/bin/mpicc FC=${mpidir}-intel/bin/mpif90 \
-    ./configure --prefix=/opt/phdf5/${version}-intel \
+    ./configure --prefix=/opt/phdf5/${version}-${mpidist}-${mpiversion}-intel \
     --enable-fortran --enable-fortran2003
 make
 make install
