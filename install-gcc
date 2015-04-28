@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -e
+
+version=$1
+
+# Download tarballs
+if [[ ! -e gcc-${version}.tar.bz2 ]]; then
+    wget http://mirrors-usa.go-parts.com/gcc/releases/gcc-${version}/gcc-${version}.tar.bz2
+fi
+
+# Extract GCC source
+if [[ ! -d gcc-${version} ]]; then
+    tar xvf gcc-${version}.tar.bz2
+fi
+cd gcc-${version}
+
+# Build and install
+./configure --prefix=/opt/gcc/${version} --with-gmp=/usr/lib --with-mpc=/usr/lib \
+    --with-mpfr=/usr/lib --disable-checking --program-suffix=-${version:0:3} \
+    --with-system-zlib --enable-threads=posix
+make
+make install
+cd ..
