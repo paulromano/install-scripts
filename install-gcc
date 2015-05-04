@@ -3,7 +3,7 @@
 set -e
 
 version=$1
-all_source=0
+use_system_libs=1
 
 # Download tarballs
 if [[ ! -e gcc-${version}.tar.bz2 ]]; then
@@ -16,24 +16,18 @@ if [[ ! -d gcc-${version} ]]; then
 fi
 cd gcc-${version}
 
-# Download and extract MPC, MPFR, GMP
-if [[ $all_source == 1 ]]; then
-    wget https://ftp.gnu.org/gnu/gmp/gmp-6.0.0a.tar.bz2
-    wget http://www.mpfr.org/mpfr-current/mpfr-3.1.2.tar.bz2
-    wget ftp://ftp.gnu.org/gnu/mpc/mpc-1.0.3.tar.gz
-
-    tar xvf gmp-6.0.0a.tar.bz2
-    tar xvf mpfr-3.1.2.tar.bz2
-    tar xvf mpc-1.0.3.tar.gz
-    mv gmp-6.0.0 gmp
-    mv mpfr-3.1.2 mpfr
-    mv mpc-1.0.3 mpc
+# Configure
+if [[ $use_system_libs == 0 ]]; then
+    ./contrib/download_prerequisites
+    ./configure --prefix=/opt/gcc/${version} --disable-checking \
+        --with-system-zlib --enable-threads=posix --program-suffix=-${version:0:3}
+else
+    ./configure --prefix=/opt/gcc/${version} --with-gmp=/usr/lib --with-mpc=/usr/lib \
+        --with-mpfr=/usr/lib --disable-checking --program-suffix=-${version:0:3} \
+        --with-system-zlib --enable-threads=posix
 fi
 
 # Build and install
-./configure --prefix=/opt/gcc/${version} --with-gmp=/usr/lib --with-mpc=/usr/lib \
-    --with-mpfr=/usr/lib --disable-checking --program-suffix=-${version:0:3} \
-    --with-system-zlib --enable-threads=posix
 make
 make install
 cd ..
