@@ -3,6 +3,7 @@
 set -e
 
 version=$1
+all_source=0
 
 # Download tarballs
 if [[ ! -e gcc-${version}.tar.bz2 ]]; then
@@ -14,6 +15,20 @@ if [[ ! -d gcc-${version} ]]; then
     tar xvf gcc-${version}.tar.bz2
 fi
 cd gcc-${version}
+
+# Download and extract MPC, MPFR, GMP
+if [[ $all_source == 1 ]]; then
+    wget https://ftp.gnu.org/gnu/gmp/gmp-6.0.0a.tar.bz2
+    wget http://www.mpfr.org/mpfr-current/mpfr-3.1.2.tar.bz2
+    wget ftp://ftp.gnu.org/gnu/mpc/mpc-1.0.3.tar.gz
+
+    tar xvf gmp-6.0.0a.tar.bz2
+    tar xvf mpfr-3.1.2.tar.bz2
+    tar xvf mpc-1.0.3.tar.gz
+    mv gmp-6.0.0 gmp
+    mv mpfr-3.1.2 mpfr
+    mv mpc-1.0.3 mpc
+fi
 
 # Build and install
 ./configure --prefix=/opt/gcc/${version} --with-gmp=/usr/lib --with-mpc=/usr/lib \
