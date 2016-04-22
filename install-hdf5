@@ -4,19 +4,19 @@ set -e
 
 version=$1
 mpidist=mpich
-mpiversion=3.2b2
+mpiversion=3.2
 mpidir=/opt/$mpidist/$mpiversion
 
 # Download tarball
 if [[ ! -e hdf5-${version}.tar.bz2 ]]; then
-    wget http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-${version}.tar.bz2
+    wget http://www.hdfgroup.org/ftp/HDF5/releases/hdf5-${version:0:4}/hdf5-${version}/src/hdf5-${version}.tar.bz2
 fi
 
 # Extract and install gcc-compiled version
 tar xvf hdf5-${version}.tar.bz2
 cd hdf5-${version}
-CC=gcc FC=gfortran ./configure --prefix=/opt/hdf5/${version}-gnu \
-    --enable-fortran --enable-fortran2003
+CC=gcc CXX=g++ FC=gfortran ./configure --prefix=/opt/hdf5/${version}-gnu \
+    --enable-fortran --enable-fortran2003 --enable-cxx
 make
 make install
 cd ..
@@ -26,8 +26,8 @@ rm -rf hdf5-${version}
 rm -rf hdf5-${version}
 tar xvf hdf5-${version}.tar.bz2
 cd hdf5-${version}
-CC=icc FC=ifort ./configure --prefix=/opt/hdf5/${version}-intel \
-    --enable-fortran --enable-fortran2003
+CC=icc CXX=icpc FC=ifort ./configure --prefix=/opt/hdf5/${version}-intel \
+    --enable-fortran --enable-fortran2003 --enable-cxx
 make
 make install
 cd ..
@@ -36,9 +36,9 @@ rm -rf hdf5-${version}
 # Extract and install gcc-compiled version
 tar xvf hdf5-${version}.tar.bz2
 cd hdf5-${version}
-CC=${mpidir}-gnu/bin/mpicc FC=${mpidir}-gnu/bin/mpif90 \
+CC=${mpidir}-gnu/bin/mpicc CXX=${mpidir}-gnu/bin/mpicxx FC=${mpidir}-gnu/bin/mpif90 \
     ./configure --prefix=/opt/phdf5/${version}-${mpidist}-${mpiversion}-gnu \
-    --enable-fortran --enable-fortran2003
+    --enable-fortran --enable-fortran2003 --enable-cxx
 make
 make install
 cd ..
@@ -47,9 +47,9 @@ rm -rf hdf5-${version}
 # Extract and install Intel-compiled version
 tar xvf hdf5-${version}.tar.bz2
 cd hdf5-${version}
-CC=${mpidir}-intel/bin/mpicc FC=${mpidir}-intel/bin/mpif90 \
+CC=${mpidir}-intel/bin/mpicc CXX=${mpidir}-intel/bin/mpicxx FC=${mpidir}-intel/bin/mpif90 \
     ./configure --prefix=/opt/phdf5/${version}-${mpidist}-${mpiversion}-intel \
-    --enable-fortran --enable-fortran2003
+    --enable-fortran --enable-fortran2003 --enable-cxx
 make
 make install
 cd ..
