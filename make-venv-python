@@ -1,0 +1,15 @@
+#!/bin/bash
+
+module purge
+module load gcc
+module load mpich
+module load phdf5
+
+pip install numpy scipy cython
+
+# Installing mpi4py relies on mpicc being on the PATH already
+pip install mpi4py
+
+# Installing h5py relies on HDF5_DIR being set. --no-binary is needed to prevent
+# installing from a wheel
+HDF5_MPI=ON pip install --no-binary=h5py h5py
