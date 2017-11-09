@@ -3,7 +3,10 @@
 set -e
 
 version=$1
-mpidir=/opt/mpich/3.1
+gnuversion=6.3
+mpidist=mpich
+mpiversion=3.2
+mpidir=/opt/$mpidist/$mpiversion
 
 # Download tarball
 if [[ ! -e petsc-${version}.tar.gz ]]; then
@@ -13,9 +16,18 @@ fi
 # Extract and install gcc-compiled version
 tar xvf petsc-${version}.tar.gz
 cd petsc-${version}
-./configure --prefix=/opt/petsc/${version}-gnu \
-    --download-fblaslapack --with-mpi-dir=${mpidir}-gnu \
-    --with-shared-libraries --with-fortran-datatypes
+python2 ./configure --prefix=/opt/petsc/${version}-${mpidist}-${mpiversion}-gnu-${gnuversion} \
+            --download-fblaslapack \
+            --download-hypre \
+            --download-metis \
+            --download-parmetis \
+            --download-superlu_dist \
+            --download-mumps \
+            --download-scalapack \
+            --with-pic \
+            --with-mpi-dir=${mpidir}-gnu-${gnuversion} \
+            --with-shared-libraries \
+            --with-fortran-datatypes
 make
 make install
 cd ..

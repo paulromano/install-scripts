@@ -3,6 +3,8 @@
 set -e
 
 version=$1
+gnuversion=6.3
+intelversion=17.0.4
 
 # Download tarball
 if [[ ! -e mpich-${version}.tar.gz ]]; then
@@ -13,7 +15,7 @@ fi
 tar xvf mpich-${version}.tar.gz
 cd mpich-${version}
 CC=gcc CXX=g++ F77=gfortran FC=gfortran ./configure \
-    --prefix=/opt/mpich/${version}-gnu
+    --prefix=/opt/mpich/${version}-gnu-${gnuversion}
 make
 make install
 cd ..
@@ -23,7 +25,7 @@ rm -rf mpich-${version}
 tar xvf mpich-${version}.tar.gz
 cd mpich-${version}
 CC=icc CXX=icpc F77=ifort FC=ifort ./configure \
-    --prefix=/opt/mpich/${version}-intel
+    --prefix=/opt/mpich/${version}-intel-${intelversion}
 make
 make install
 cd ..

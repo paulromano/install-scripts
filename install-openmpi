@@ -3,6 +3,8 @@
 set -e
 
 version=$1
+gnuversion=6.3
+intelversion=17.0.4
 
 # Download tarball
 if [[ ! -e openmpi-${version}.tar.bz2 ]]; then
@@ -13,7 +15,7 @@ fi
 tar xvf openmpi-${version}.tar.bz2
 cd openmpi-${version}
 CC=gcc CXX=g++ FC=gfortran ./configure \
-    --prefix=/opt/openmpi/${version}-gnu
+    --prefix=/opt/openmpi/${version}-gnu-${gnuversion}
 make
 make install
 cd ..
@@ -23,7 +25,7 @@ rm -rf openmpi-${version}
 tar xvf openmpi-${version}.tar.bz2
 cd openmpi-${version}
 CC=icc CXX=icpc FC=ifort ./configure \
-    --prefix=/opt/openmpi/${version}-intel
+    --prefix=/opt/openmpi/${version}-intel-${intelversion}
 make
 make install
 cd ..
