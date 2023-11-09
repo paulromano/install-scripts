@@ -1,0 +1,16 @@
+#!/bin/bash
+
+
+DD_REPO=https://github.com/pshriwise/double-down
+DD_INSTALL_DIR=/opt/double-down/
+MOAB_DIR=/opt/moab/5.5.0
+
+mkdir -p double-down-build && cd double-down-build
+git clone $DD_REPO
+mkdir -p build && cd build
+cmake -DCMAKE_INSTALL_PREFIX=$DD_INSTALL_DIR \
+      -DMOAB_DIR=$MOAB_DIR \
+      -DEMBREE_DIR=/usr/ \
+      ../double-down
+make -j6
+make install
