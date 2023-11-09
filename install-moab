@@ -1,0 +1,23 @@
+#!/bin/bash
+
+set -e
+
+# Should correspond to a git tag
+version=$1
+
+MOAB_REPO='https://bitbucket.org/fathomteam/moab/'
+MOAB_INSTALL_DIR=/opt/moab/$version
+
+mkdir -p moab-build && cd moab-build
+git clone -b $version $MOAB_REPO
+mkdir -p build && cd build
+cmake -DCMAKE_BUILD_TYPE=Release \
+      -DENABLE_HDF5=ON \
+      -DENABLE_NETCDF=ON \
+      -DBUILD_SHARED_LIBS=ON \
+      -DENABLE_PYMOAB=ON \
+      -DCMAKE_INSTALL_PREFIX=$MOAB_INSTALL_DIR \
+      -DENABLE_BLASLAPACK=OFF \
+      ../moab
+make -j6
+make -j6 install

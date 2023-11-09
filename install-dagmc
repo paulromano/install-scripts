@@ -1,0 +1,19 @@
+#!/bin/bash
+
+version=$1
+
+DAGMC_REPO=https://github.com/svalinn/dagmc
+DAGMC_INSTALL_DIR=/opt/dagmc/$version-moab5.5.0-dd
+MOAB_INSTALL_DIR=/opt/moab/5.5.0
+
+mkdir -p dagmc-build && cd dagmc-build
+git clone -b v$version $DAGMC_REPO
+mkdir -p build && cd build
+cmake -DBUILD_TALLY=ON \
+      -DCMAKE_INSTALL_PREFIX=$DAGMC_INSTALL_DIR \
+      -DBUILD_STATIC_LIBS=OFF \
+      -DMOAB_DIR=$MOAB_INSTALL_DIR \
+      -DDOUBLE_DOWN=ON \
+      -DDOUBLE_DOWN_DIR=/opt/double-down/lib/cmake/dd \
+      ../dagmc
+make -j6 install
